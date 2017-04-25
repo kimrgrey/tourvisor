@@ -1,14 +1,19 @@
 #!/usr/bin/env ruby
 
-require "bundler/setup"
-require "tourvisor"
+require 'bundler/setup'
+require 'tourvisor'
+require 'yaml'
 
-# You can add fixtures and/or initialization code here to make experimenting
-# with your gem easier. You can also use a different console, if you like.
+config_path = File.expand_path("../../config.yml", Pathname.new(__FILE__).realpath)
 
-# (If you use this, don't forget to add pry to your Gemfile!)
-# require "pry"
-# Pry.start
+if File.exists?(config_path)
+  yaml = YAML.load(File.read(config_path))
 
-require "irb"
+  Tourvisor.configure do |config|
+    config.login = yaml['login']
+    config.password = yaml['password']
+  end
+end
+
+require 'irb'
 IRB.start(__FILE__)
